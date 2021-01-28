@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`can get Block 1`] = `
+Object {
+  "api": "type Query {
+  note: String
+  hat: String
+}
+
+schema {
+  query: Query
+}
+",
+  "code": Object {
+    "Mutation": Object {},
+    "Query": Object {
+      "hat": "FUNCTION",
+      "note": "FUNCTION",
+    },
+  },
+  "config": Object {
+    "auth": false,
+    "env": Object {},
+    "name": "hi",
+    "profile": "example",
+    "region": "us-east-2",
+    "s3BucketFile": "rise-lambdadeployments",
+    "s3BucketName": "rise-hi-dev.zip",
+    "stage": "dev",
+  },
+}
+`;

@@ -1,0 +1,33 @@
+{
+    "globals": {
+        "ts-jest": {
+            "tsConfigFile": "tsconfig.json"
+        }
+    },
+    "moduleFileExtensions": ["ts", "js"],
+    "collectCoverageFrom": [
+        "src/domain/members/**/*.ts",
+        "src/domain/organizations/**/*.ts"
+    ],
+    "testPathIgnorePatterns": [
+        "_integrationtests",
+        "src/infra",
+        "src/domain/seeder/"
+    ],
+    "coverageThreshold": {
+        "global": {
+            "branches": 0,
+            "functions": 70,
+            "lines": 70,
+            "statements": 70
+        }
+    },
+    "collectCoverage": true,
+    "coverageReporters": ["text", "html", "json-summary"],
+    "transform": {
+        "^.+\\.(ts|tsx)$": "./node_modules/ts-jest/preprocessor.js"
+    },
+
+    "testMatch": ["**/__tests__/**/*.ts?(x)", "**/?(*.)(spec|test).ts?(x)"],
+    "testEnvironment": "node"
+}
