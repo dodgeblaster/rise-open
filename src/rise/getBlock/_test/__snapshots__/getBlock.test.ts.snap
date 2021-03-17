@@ -12,20 +12,27 @@ schema {
 }
 ",
   "code": Object {
+    "Events": Object {},
     "Mutation": Object {},
     "Query": Object {
-      "hat": "FUNCTION",
-      "note": "FUNCTION",
+      "hat": Object {
+        "type": "function",
+      },
+      "note": Object {
+        "type": "function",
+      },
     },
   },
   "config": Object {
+    "additionalUserPool": null,
     "auth": false,
     "env": Object {},
+    "events": Array [],
     "name": "hi",
     "profile": "example",
     "region": "us-east-2",
-    "s3BucketFile": "rise-lambdadeployments",
-    "s3BucketName": "rise-hi-dev.zip",
+    "s3BucketFile": "rise-hi-dev.zip",
+    "s3BucketName": "rise-lambdadeployments",
     "stage": "dev",
   },
 }

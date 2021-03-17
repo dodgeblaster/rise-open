@@ -43,6 +43,9 @@ type RiseBlockCode = {
     Mutation?: {
         [name: string]: Function | Resolver
     }
+    Events?: {
+        [name: string]: Function | Resolver
+    }
 }
 
 //ny // need to make this into a proper type

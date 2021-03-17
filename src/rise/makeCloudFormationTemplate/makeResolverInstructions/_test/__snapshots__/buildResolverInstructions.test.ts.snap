@@ -9,19 +9,19 @@ Array [
         #set( $myMap = {
             \\"ctx\\": $ctx,
             \\"action\\": [{ 
-    \\"type\\": \\"GUARD\\",
+    \\"type\\": \\"guard\\",
     \\"pk\\": \\"123\\",
     \\"sk\\": \\"123\\",
     \\"table\\": \\"hi-dev\\"
 },{
-    \\"type\\": \\"ADD\\",
+    \\"type\\": \\"add\\",
     \\"note\\":\\"!email\\"
 },{ 
-    \\"type\\": \\"FUNCTION\\",
-    \\"app\\": \\"hi\\", 
-    \\"stage\\": \\"dev\\"
+    \\"type\\": \\"function\\",
+    \\"table\\": \\"hi-dev\\",
+    \\"userpoolId\\":\\"\${UserPoolId}\\"
 },{ 
-    \\"type\\": \\"DB\\",
+    \\"type\\": \\"db\\",
     \\"action\\": \\"create\\",
     \\"table\\": \\"hi-dev\\"
 }]
@@ -41,7 +41,7 @@ Array [
         #set( $myMap = {
             \\"ctx\\": $ctx,
             \\"action\\": { 
-    \\"type\\": \\"GUARD\\",
+    \\"type\\": \\"guard\\",
     \\"pk\\": \\"123\\",
     \\"sk\\": \\"123\\",
     \\"table\\": \\"hi-dev\\"
@@ -62,7 +62,7 @@ Array [
         #set( $myMap = {
             \\"ctx\\": $ctx,
             \\"action\\": {
-    \\"type\\": \\"ADD\\",
+    \\"type\\": \\"add\\",
     \\"note\\":\\"!email\\"
 }
         })
@@ -81,9 +81,9 @@ Array [
         #set( $myMap = {
             \\"ctx\\": $ctx,
             \\"action\\": { 
-    \\"type\\": \\"FUNCTION\\",
-    \\"app\\": \\"hi\\", 
-    \\"stage\\": \\"dev\\"
+    \\"type\\": \\"function\\",
+    \\"table\\": \\"hi-dev\\",
+    \\"userpoolId\\":\\"\${UserPoolId}\\"
 }
         })
         
@@ -101,7 +101,7 @@ Array [
         #set( $myMap = {
             \\"ctx\\": $ctx,
             \\"action\\": { 
-    \\"type\\": \\"DB\\",
+    \\"type\\": \\"db\\",
     \\"action\\": \\"create\\",
     \\"table\\": \\"hi-dev\\"
 }
@@ -121,19 +121,19 @@ Array [
         #set( $myMap = {
             \\"ctx\\": $ctx,
             \\"action\\": [{ 
-    \\"type\\": \\"GUARD\\",
+    \\"type\\": \\"guard\\",
     \\"pk\\": \\"123\\",
     \\"sk\\": \\"123\\",
     \\"table\\": \\"hi-dev\\"
 },{
-    \\"type\\": \\"ADD\\",
+    \\"type\\": \\"add\\",
     \\"note\\":\\"!email\\"
 },{ 
-    \\"type\\": \\"FUNCTION\\",
-    \\"app\\": \\"hi\\", 
-    \\"stage\\": \\"dev\\"
+    \\"type\\": \\"function\\",
+    \\"table\\": \\"hi-dev\\",
+    \\"userpoolId\\":\\"\${UserPoolId}\\"
 },{ 
-    \\"type\\": \\"DB\\",
+    \\"type\\": \\"db\\",
     \\"action\\": \\"create\\",
     \\"table\\": \\"hi-dev\\"
 }]
@@ -153,7 +153,7 @@ Array [
         #set( $myMap = {
             \\"ctx\\": $ctx,
             \\"action\\": { 
-    \\"type\\": \\"GUARD\\",
+    \\"type\\": \\"guard\\",
     \\"pk\\": \\"123\\",
     \\"sk\\": \\"123\\",
     \\"table\\": \\"hi-dev\\"
@@ -174,7 +174,7 @@ Array [
         #set( $myMap = {
             \\"ctx\\": $ctx,
             \\"action\\": {
-    \\"type\\": \\"ADD\\",
+    \\"type\\": \\"add\\",
     \\"note\\":\\"!email\\"
 }
         })
@@ -193,9 +193,9 @@ Array [
         #set( $myMap = {
             \\"ctx\\": $ctx,
             \\"action\\": { 
-    \\"type\\": \\"FUNCTION\\",
-    \\"app\\": \\"hi\\", 
-    \\"stage\\": \\"dev\\"
+    \\"type\\": \\"function\\",
+    \\"table\\": \\"hi-dev\\",
+    \\"userpoolId\\":\\"\${UserPoolId}\\"
 }
         })
         
@@ -213,7 +213,7 @@ Array [
         #set( $myMap = {
             \\"ctx\\": $ctx,
             \\"action\\": { 
-    \\"type\\": \\"DB\\",
+    \\"type\\": \\"db\\",
     \\"action\\": \\"create\\",
     \\"table\\": \\"hi-dev\\"
 }

@@ -78,7 +78,8 @@ test('build resolver instructions works', () => {
                     type: 'db',
                     action: 'create'
                 }
-            }
+            },
+            Events: {}
         },
         config: {
             auth: false,
