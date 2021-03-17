@@ -3,15 +3,14 @@ import getBlock from '../index'
 test('can get Block', async () => {
     const projectPath = __dirname + '/exampleProject'
 
-    const result = await getBlock(
-        {
+    const result = await getBlock({
+        flags: {
             profile: 'example',
             region: 'us-east-2',
-            stage: 'dev',
-            name: 'blueapp'
+            stage: 'dev'
         },
         projectPath
-    )
+    })
 
     expect(result).toMatchSnapshot()
 })

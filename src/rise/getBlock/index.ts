@@ -16,7 +16,11 @@ const getCodeByTypeFromBlock = (block: any, type: string) => {
 
     const codeBlocks = Object.keys(block.code[type] || [])
     const formatIntoRiseDeclaration = (x: any) => {
-        return typeof x === 'function' ? 'FUNCTION' : x
+        return typeof x === 'function'
+            ? {
+                  type: 'function'
+              }
+            : x
     }
 
     return codeBlocks.reduce((acc, k) => {
@@ -80,6 +84,7 @@ const getRiseBlock = async (pathString: string, isModule: boolean) => {
 
     x.code.Query = getCodeByTypeFromBlock(x, 'Query')
     x.code.Mutation = getCodeByTypeFromBlock(x, 'Mutation')
+    x.code.Events = getCodeByTypeFromBlock(x, 'Events')
     return x
 }
 
@@ -112,6 +117,10 @@ async function getRootRiseBlock(pathPrefix: string) {
             ...block.code.Mutation,
             ...nestedBlock.code.Mutation
         }
+        block.code.Events = {
+            ...block.code.Events,
+            ...nestedBlock.code.Events
+        }
 
         // Merge schema into root rise schema
         if (block.api) {
@@ -127,6 +136,31 @@ async function getRootRiseBlock(pathPrefix: string) {
         throw new Error('You must have at least 1 Query or Mutation defined')
     }
 
+    // Appsync must have at least 1 query. If not, CF will fail
+    if (Object.keys(block.code.Query).length === 0) {
+        block.code.Query = {
+            ...block.code.Query,
+            ...{
+                ping: {
+                    type: 'function'
+                }
+            }
+        }
+
+        const ast = qlmerge.mergeTypeDefs([
+            block.api,
+            `
+       type Query {
+           ping: String
+       }
+        schema {
+            query: Query
+        }`
+        ])
+
+        block.api = qlmerge.printWithComments(ast)
+    }
+
     if (block.api.trim().length === 0) {
         throw new Error('You must have GraphQL types defined')
     }
@@ -134,27 +168,51 @@ async function getRootRiseBlock(pathPrefix: string) {
     return block
 }
 
-async function getBlock(
-    input: RiseCommandInput,
-    pathPrefix: string
-): Promise<RiseBlock> {
-    let block = await getRootRiseBlock(pathPrefix)
+type Input = {
+    flags: RiseCommandInput
+    projectPath: string
+}
 
-    const name = block.config.name
+type Output = Promise<RiseBlock>
+
+async function getBlock(input: Input): Output {
+    let block = await getRootRiseBlock(input.projectPath)
+
+    const name = block.config.name.split(' ').join('')
     if (!name) {
         throw new Error('Rise App must have a name defined')
     }
 
-    const profile = input.profile || block.config.profile || 'default'
-    const region = input.region || block.config.region || 'us-east-1'
-    const stage = input.stage || block.config.stage || 'dev'
+    const profile = input.flags.profile || block.config.profile || 'default'
+    const region = input.flags.region || block.config.region || 'us-east-1'
+    const stage = input.flags.stage || block.config.stage || 'dev'
     const auth = block.config.auth || false
-    const env = block.config.env || {}
     const bucketName = 'rise-lambdadeployments'
     const bucketFile = `rise-${name}-${stage}.zip`
+    const additionalUserPool = block.config.additionalUserPool || null
+
+    // const env = Object.keys(block.config.env || {}).reduce((acc: any, k) => {
+    //     if (block.config.env[k].startsWith('ssm:')) {
+    //         acc[k] = block.config.env[k]
+    //         return acc
+    //     }
+
+    //     const x = process.env[k]
+
+    //     if (!x || x === undefined) {
+    //         throw new Error(
+    //             `Environment variable "${k}" is not defined in your environment`
+    //         )
+    //     }
+
+    //     acc[k] = x
+    //     return acc
+    // }, {})
+
+    const events = block.code.Events ? Object.keys(block.code.Events) : []
 
     return {
-        api: block.api,
+        api: block.api.replace('@public', '@aws_api_key'),
         code: block.code,
         config: {
             name: name,
@@ -162,9 +220,11 @@ async function getBlock(
             profile: profile,
             region: region,
             stage: stage,
-            env: env,
-            s3BucketFile: bucketName,
-            s3BucketName: bucketFile
+            env: block.config.env || {},
+            s3BucketFile: bucketFile,
+            s3BucketName: bucketName,
+            events: events,
+            additionalUserPool
         }
     }
 }

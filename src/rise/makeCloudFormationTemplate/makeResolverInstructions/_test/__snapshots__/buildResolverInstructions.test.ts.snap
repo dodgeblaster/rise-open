@@ -1,0 +1,230 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`build resolver instructions works 1`] = `
+Array [
+  Object {
+    "field": "submit",
+    "type": "Query",
+    "vtlRequest": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": [{ 
+    \\"type\\": \\"GUARD\\",
+    \\"pk\\": \\"123\\",
+    \\"sk\\": \\"123\\",
+    \\"table\\": \\"hi-dev\\"
+},{
+    \\"type\\": \\"ADD\\",
+    \\"note\\":\\"!email\\"
+},{ 
+    \\"type\\": \\"FUNCTION\\",
+    \\"app\\": \\"hi\\", 
+    \\"stage\\": \\"dev\\"
+},{ 
+    \\"type\\": \\"DB\\",
+    \\"action\\": \\"create\\",
+    \\"table\\": \\"hi-dev\\"
+}]
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+    "vtlResponse": "$util.toJson($ctx.result)",
+  },
+  Object {
+    "field": "check",
+    "type": "Query",
+    "vtlRequest": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": { 
+    \\"type\\": \\"GUARD\\",
+    \\"pk\\": \\"123\\",
+    \\"sk\\": \\"123\\",
+    \\"table\\": \\"hi-dev\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+    "vtlResponse": "$util.toJson($ctx.result)",
+  },
+  Object {
+    "field": "add",
+    "type": "Query",
+    "vtlRequest": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": {
+    \\"type\\": \\"ADD\\",
+    \\"note\\":\\"!email\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+    "vtlResponse": "$util.toJson($ctx.result)",
+  },
+  Object {
+    "field": "hat",
+    "type": "Query",
+    "vtlRequest": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": { 
+    \\"type\\": \\"FUNCTION\\",
+    \\"app\\": \\"hi\\", 
+    \\"stage\\": \\"dev\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+    "vtlResponse": "$util.toJson($ctx.result)",
+  },
+  Object {
+    "field": "note",
+    "type": "Query",
+    "vtlRequest": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": { 
+    \\"type\\": \\"DB\\",
+    \\"action\\": \\"create\\",
+    \\"table\\": \\"hi-dev\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+    "vtlResponse": "$util.toJson($ctx.result)",
+  },
+  Object {
+    "field": "submit",
+    "type": "Mutation",
+    "vtlRequest": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": [{ 
+    \\"type\\": \\"GUARD\\",
+    \\"pk\\": \\"123\\",
+    \\"sk\\": \\"123\\",
+    \\"table\\": \\"hi-dev\\"
+},{
+    \\"type\\": \\"ADD\\",
+    \\"note\\":\\"!email\\"
+},{ 
+    \\"type\\": \\"FUNCTION\\",
+    \\"app\\": \\"hi\\", 
+    \\"stage\\": \\"dev\\"
+},{ 
+    \\"type\\": \\"DB\\",
+    \\"action\\": \\"create\\",
+    \\"table\\": \\"hi-dev\\"
+}]
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+    "vtlResponse": "$util.toJson($ctx.result)",
+  },
+  Object {
+    "field": "check",
+    "type": "Mutation",
+    "vtlRequest": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": { 
+    \\"type\\": \\"GUARD\\",
+    \\"pk\\": \\"123\\",
+    \\"sk\\": \\"123\\",
+    \\"table\\": \\"hi-dev\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+    "vtlResponse": "$util.toJson($ctx.result)",
+  },
+  Object {
+    "field": "add",
+    "type": "Mutation",
+    "vtlRequest": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": {
+    \\"type\\": \\"ADD\\",
+    \\"note\\":\\"!email\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+    "vtlResponse": "$util.toJson($ctx.result)",
+  },
+  Object {
+    "field": "hat",
+    "type": "Mutation",
+    "vtlRequest": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": { 
+    \\"type\\": \\"FUNCTION\\",
+    \\"app\\": \\"hi\\", 
+    \\"stage\\": \\"dev\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+    "vtlResponse": "$util.toJson($ctx.result)",
+  },
+  Object {
+    "field": "note",
+    "type": "Mutation",
+    "vtlRequest": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": { 
+    \\"type\\": \\"DB\\",
+    \\"action\\": \\"create\\",
+    \\"table\\": \\"hi-dev\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+    "vtlResponse": "$util.toJson($ctx.result)",
+  },
+]
+`;

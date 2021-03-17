@@ -1,4 +1,7 @@
-function getCredentials(AWS: any, profile: String, region: String): void {
+import { RiseBlock } from '../../types'
+const AWS = require('aws-sdk')
+
+function getCredentials(block: RiseBlock): any {
     const credentialsDefinedAsEnv = process.env.AWS_KEY && process.env.AWS_SECRE
 
     /**
@@ -11,7 +14,7 @@ function getCredentials(AWS: any, profile: String, region: String): void {
         AWS.config.update({
             accessKeyId: process.env.AWS_KEY,
             secretAccessKey: process.env.AWS_SECRET,
-            region: region
+            region: block.config.region
         })
     }
 
@@ -23,14 +26,23 @@ function getCredentials(AWS: any, profile: String, region: String): void {
     if (!credentialsDefinedAsEnv) {
         try {
             const credentials = new AWS.SharedIniFileCredentials({
-                profile
+                profile: block.config.profile
             })
+
+            if (!credentials.accessKeyId) {
+                throw new Error('No Access Key')
+            }
+
             AWS.config.credentials = credentials
-            AWS.config.region = region
+            AWS.config.region = block.config.region
         } catch (e) {
-            throw new Error('There was an issue reading your AWS credentials')
+            throw new Error(
+                'There was an issue reading your local AWS credentials from your credentials file. Learn more about configuring your credentails here:\n\nhttps://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html'
+            )
         }
     }
+
+    return AWS
 }
 
 export default getCredentials

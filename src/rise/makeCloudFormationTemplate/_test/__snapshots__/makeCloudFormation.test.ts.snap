@@ -1,0 +1,734 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`build resolver instructions works 1`] = `
+Object {
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "AWS CloudFormation Rise Template",
+  "Outputs": Object {
+    "ApiKey": Object {
+      "Description": "ApiKey",
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "GraphQlApiKeyDefault",
+          "ApiKey",
+        ],
+      },
+    },
+    "ApiUrl": Object {
+      "Description": "URL",
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "GraphQlApi",
+          "GraphQLUrl",
+        ],
+      },
+    },
+  },
+  "Resources": Object {
+    "Database": Object {
+      "Properties": Object {
+        "AttributeDefinitions": Array [
+          Object {
+            "AttributeName": "pk",
+            "AttributeType": "S",
+          },
+          Object {
+            "AttributeName": "sk",
+            "AttributeType": "S",
+          },
+          Object {
+            "AttributeName": "pk2",
+            "AttributeType": "S",
+          },
+          Object {
+            "AttributeName": "pk3",
+            "AttributeType": "S",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "GlobalSecondaryIndexes": Array [
+          Object {
+            "IndexName": "pk2",
+            "KeySchema": Array [
+              Object {
+                "AttributeName": "pk2",
+                "KeyType": "HASH",
+              },
+              Object {
+                "AttributeName": "sk",
+                "KeyType": "RANGE",
+              },
+            ],
+            "Projection": Object {
+              "ProjectionType": "ALL",
+            },
+          },
+          Object {
+            "IndexName": "pk3",
+            "KeySchema": Array [
+              Object {
+                "AttributeName": "pk3",
+                "KeyType": "HASH",
+              },
+              Object {
+                "AttributeName": "sk",
+                "KeyType": "RANGE",
+              },
+            ],
+            "Projection": Object {
+              "ProjectionType": "ALL",
+            },
+          },
+        ],
+        "KeySchema": Array [
+          Object {
+            "AttributeName": "pk",
+            "KeyType": "HASH",
+          },
+          Object {
+            "AttributeName": "sk",
+            "KeyType": "RANGE",
+          },
+        ],
+        "TableName": "hi-dev",
+      },
+      "Type": "AWS::DynamoDB::Table",
+    },
+    "GraphQLEndpointLambdaFunction": Object {
+      "DependsOn": Array [
+        "MainFunctionLogGroup",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "rise-hi-dev.zip",
+          "S3Key": "rise-lambdadeployments",
+        },
+        "Description": "",
+        "Environment": Object {
+          "Variables": Object {},
+        },
+        "FunctionName": "hi-dev",
+        "Handler": "_index.handler",
+        "MemorySize": 256,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "IamRoleLambdaExecution",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 15,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "GraphQlApi": Object {
+      "Properties": Object {
+        "AuthenticationType": "API_KEY",
+        "Name": "hi-dev",
+        "XrayEnabled": false,
+      },
+      "Type": "AWS::AppSync::GraphQLApi",
+    },
+    "GraphQlApiKeyDefault": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlApi",
+            "ApiId",
+          ],
+        },
+        "Expires": 1627859769,
+      },
+      "Type": "AWS::AppSync::ApiKey",
+    },
+    "GraphQlDslambdadatasource": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlApi",
+            "ApiId",
+          ],
+        },
+        "Description": "Main Lambda function",
+        "LambdaConfig": Object {
+          "LambdaFunctionArn": Object {
+            "Fn::GetAtt": Array [
+              "GraphQLEndpointLambdaFunction",
+              "Arn",
+            ],
+          },
+        },
+        "Name": "lambdadatasource",
+        "ServiceRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlDslambdadatasourceRole",
+            "Arn",
+          ],
+        },
+        "Type": "AWS_LAMBDA",
+      },
+      "Type": "AWS::AppSync::DataSource",
+    },
+    "GraphQlDslambdadatasourceRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "sts:AssumeRole",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Array [
+                  "appsync.amazonaws.com",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Policies": Array [
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "lambda:invokeFunction",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "GraphQLEndpointLambdaFunction",
+                        "Arn",
+                      ],
+                    },
+                    Object {
+                      "Fn::Join": Array [
+                        ":",
+                        Array [
+                          Object {
+                            "Fn::GetAtt": Array [
+                              "GraphQLEndpointLambdaFunction",
+                              "Arn",
+                            ],
+                          },
+                          "*",
+                        ],
+                      ],
+                    },
+                  ],
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "GraphQlDslambdadatasourcePolicy",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "GraphQlSchema": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlApi",
+            "ApiId",
+          ],
+        },
+        "Definition": "",
+      },
+      "Type": "AWS::AppSync::GraphQLSchema",
+    },
+    "IamRoleLambdaExecution": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "sts:AssumeRole",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Array [
+                  "lambda.amazonaws.com",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Path": "/",
+        "Policies": Array [
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": Array [
+                    Object {
+                      "Fn::Sub": "arn:\${AWS::Partition}:logs:\${AWS::Region}:\${AWS::AccountId}:log-group:/aws/lambda/hi-dev*:*",
+                    },
+                  ],
+                },
+                Object {
+                  "Action": Array [
+                    "logs:PutLogEvents",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": Array [
+                    Object {
+                      "Fn::Sub": "arn:\${AWS::Partition}:logs:\${AWS::Region}:\${AWS::AccountId}:log-group:/aws/lambda/hi-dev*:*",
+                    },
+                  ],
+                },
+                Object {
+                  "Action": Array [
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:DeleteItem",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::Sub": "arn:aws:dynamodb:\${AWS::Region}:*:*",
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": Object {
+              "Fn::Join": Array [
+                "-",
+                Array [
+                  "hi-dev",
+                  "lambda",
+                ],
+              ],
+            },
+          },
+        ],
+        "RoleName": Object {
+          "Fn::Join": Array [
+            "-",
+            Array [
+              "hi-dev",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              "lambdaRole",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "MainFunctionLogGroup": Object {
+      "Properties": Object {
+        "LogGroupName": "/aws/lambda/hi-dev",
+      },
+      "Type": "AWS::Logs::LogGroup",
+    },
+    "ResolverMutationadd": Object {
+      "DependsOn": "GraphQlSchema",
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlApi",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlDslambdadatasource",
+            "Name",
+          ],
+        },
+        "FieldName": "add",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": {
+    \\"type\\": \\"ADD\\",
+    \\"note\\":\\"!email\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Mutation",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "ResolverMutationcheck": Object {
+      "DependsOn": "GraphQlSchema",
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlApi",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlDslambdadatasource",
+            "Name",
+          ],
+        },
+        "FieldName": "check",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": { 
+    \\"type\\": \\"GUARD\\",
+    \\"pk\\": \\"123\\",
+    \\"sk\\": \\"123\\",
+    \\"table\\": \\"hi-dev\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Mutation",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "ResolverMutationhat": Object {
+      "DependsOn": "GraphQlSchema",
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlApi",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlDslambdadatasource",
+            "Name",
+          ],
+        },
+        "FieldName": "hat",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": { 
+    \\"type\\": \\"FUNCTION\\",
+    \\"app\\": \\"hi\\", 
+    \\"stage\\": \\"dev\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Mutation",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "ResolverMutationnote": Object {
+      "DependsOn": "GraphQlSchema",
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlApi",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlDslambdadatasource",
+            "Name",
+          ],
+        },
+        "FieldName": "note",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": { 
+    \\"type\\": \\"DB\\",
+    \\"action\\": \\"create\\",
+    \\"table\\": \\"hi-dev\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Mutation",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "ResolverMutationsubmit": Object {
+      "DependsOn": "GraphQlSchema",
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlApi",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlDslambdadatasource",
+            "Name",
+          ],
+        },
+        "FieldName": "submit",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": [{ 
+    \\"type\\": \\"GUARD\\",
+    \\"pk\\": \\"123\\",
+    \\"sk\\": \\"123\\",
+    \\"table\\": \\"hi-dev\\"
+},{
+    \\"type\\": \\"ADD\\",
+    \\"note\\":\\"!email\\"
+},{ 
+    \\"type\\": \\"FUNCTION\\",
+    \\"app\\": \\"hi\\", 
+    \\"stage\\": \\"dev\\"
+},{ 
+    \\"type\\": \\"DB\\",
+    \\"action\\": \\"create\\",
+    \\"table\\": \\"hi-dev\\"
+}]
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Mutation",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "ResolverQueryadd": Object {
+      "DependsOn": "GraphQlSchema",
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlApi",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlDslambdadatasource",
+            "Name",
+          ],
+        },
+        "FieldName": "add",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": {
+    \\"type\\": \\"ADD\\",
+    \\"note\\":\\"!email\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Query",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "ResolverQuerycheck": Object {
+      "DependsOn": "GraphQlSchema",
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlApi",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlDslambdadatasource",
+            "Name",
+          ],
+        },
+        "FieldName": "check",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": { 
+    \\"type\\": \\"GUARD\\",
+    \\"pk\\": \\"123\\",
+    \\"sk\\": \\"123\\",
+    \\"table\\": \\"hi-dev\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Query",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "ResolverQueryhat": Object {
+      "DependsOn": "GraphQlSchema",
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlApi",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlDslambdadatasource",
+            "Name",
+          ],
+        },
+        "FieldName": "hat",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": { 
+    \\"type\\": \\"FUNCTION\\",
+    \\"app\\": \\"hi\\", 
+    \\"stage\\": \\"dev\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Query",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "ResolverQuerynote": Object {
+      "DependsOn": "GraphQlSchema",
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlApi",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlDslambdadatasource",
+            "Name",
+          ],
+        },
+        "FieldName": "note",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": { 
+    \\"type\\": \\"DB\\",
+    \\"action\\": \\"create\\",
+    \\"table\\": \\"hi-dev\\"
+}
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Query",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "ResolverQuerysubmit": Object {
+      "DependsOn": "GraphQlSchema",
+      "Properties": Object {
+        "ApiId": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlApi",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": Object {
+          "Fn::GetAtt": Array [
+            "GraphQlDslambdadatasource",
+            "Name",
+          ],
+        },
+        "FieldName": "submit",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "
+        #set( $myMap = {
+            \\"ctx\\": $ctx,
+            \\"action\\": [{ 
+    \\"type\\": \\"GUARD\\",
+    \\"pk\\": \\"123\\",
+    \\"sk\\": \\"123\\",
+    \\"table\\": \\"hi-dev\\"
+},{
+    \\"type\\": \\"ADD\\",
+    \\"note\\":\\"!email\\"
+},{ 
+    \\"type\\": \\"FUNCTION\\",
+    \\"app\\": \\"hi\\", 
+    \\"stage\\": \\"dev\\"
+},{ 
+    \\"type\\": \\"DB\\",
+    \\"action\\": \\"create\\",
+    \\"table\\": \\"hi-dev\\"
+}]
+        })
+        
+        { 
+            \\"version\\": \\"2017-02-28\\",
+            \\"operation\\": \\"Invoke\\",
+            \\"payload\\": $util.toJson($myMap)
+        }",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Query",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+  },
+}
+`;

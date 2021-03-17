@@ -4,10 +4,9 @@
  *
  */
 export interface RiseCommandInput {
-    name: String
-    profile: String
-    region: String
-    stage: String
+    profile?: string
+    region?: string
+    stage?: string
 }
 
 /**
@@ -17,29 +16,32 @@ export interface RiseCommandInput {
  * be configured
  *
  */
-export type RiseBlock = {
+export interface RiseBlock {
     api: RiseBlockApi
     code: RiseBlockCode
     config: RiseBlockConfig
 }
+
 type RiseBlockConfig = {
-    name: String
-    profile: String
-    region: String
-    stage: String
-    auth: Boolean
-    env: Object
-    s3BucketName: String
-    s3BucketFile: String
+    name: string
+    profile: string
+    region: string
+    stage: string
+    auth: boolean
+    env: Record<string, string>
+    s3BucketName: string
+    s3BucketFile: string
+    events: string[]
+    additionalUserPool?: string
 }
 
-type RiseBlockApi = String
+type RiseBlockApi = string
 type RiseBlockCode = {
     Query?: {
-        [name: string]: Function
+        [name: string]: Function | Resolver
     }
     Mutation?: {
-        [name: string]: Function
+        [name: string]: Function | Resolver
     }
 }
 
@@ -53,14 +55,66 @@ type RiseBlockCode = {
  *
  */
 export interface RiseOutput {
-    endpoint: String
-    table: String
-    apiKey?: String
+    endpoint: string
+    table: string
+    apiKey?: string
     userPool?: UserPoolSettings
 }
 
-interface UserPoolSettings {
-    userPoolId: String
-    userPoolRegion: String
-    userPoolClientId: String
+type UserPoolSettings = {
+    userPoolId: string
+    userPoolRegion: string
+    userPoolClientId: string
 }
+
+/**
+ * Actions
+ *
+ */
+type Action = 'db' | 'add' | 'guard'
+
+type DbActionDefinition = {
+    type: 'db'
+    action: 'create' | 'remove' | 'get' | 'list'
+    sk?: string
+    pk?: string
+    pk2?: string
+    pk3?: string
+
+    // retry: {
+
+    // },
+
+    // catch: {
+
+    // }
+}
+
+type AddActionDefinition = {
+    type: 'add'
+    [value: string]: string
+}
+
+type GuardActionDefinition = {
+    type: 'guard'
+    inputPath?: 'string' // if schema has input, then we say take everything from input, rather than root
+    outputMerge?: 'string' // think thru
+    outputPath?: 'string' // think thru
+
+    sk: string
+    pk?: string
+    pk2?: string
+    pk3?: string
+}
+
+type FunctionActionDefinition = {
+    type: 'function'
+}
+
+type ActionDefinition =
+    | DbActionDefinition
+    | AddActionDefinition
+    | GuardActionDefinition
+    | FunctionActionDefinition
+
+export type Resolver = ActionDefinition | ActionDefinition[]
